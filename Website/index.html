@@ -1,0 +1,80 @@
+<html>
+<head>
+<link type="text/css" rel="stylesheet" href="main.css" />
+<title>AyeEmTeeBee's 100% lajit wabseit!!!!</title>
+<script>
+function banner(){ 
+var text = confirm("Moo..."); 
+}
+
+function rood(){ 
+var text = confirm("Y u sow meen nd uhglee?"); 
+return text; 
+}
+
+
+function answer(){ 
+var radio = document.getElementsByName("trivia"); 
+var selection = false; 
+var message = "";
+for( var i = 0; i < radio.length; i++) { 
+if(radio[i].value == "der" && radio[i].checked == true) { 
+selection = true; 
+}
+}
+if(selection == true) {
+message = message + "<b><p style='color:green'>Yah :3</p></b>"; 
+} else { 
+message = message + "<b><p style='color:red'>Et es Taylor u brineded!</p></b>"; 
+}
+document.getElementById("response").innerHTML = message;
+}
+</script>
+<style>
+
+</style>
+</head>
+<body>
+<a href="http://bing.com" onclick="return banner()"> 
+<header> AyeEmTeeBee's 100% lajit wabseit!!!!</header>
+</a>
+<nav> <ul id="navmenu">
+<li class="navitem"> <a href="derp.html"> Derp </a> </li>
+<li class="navitem"> <a href="derp2.html"> MOAR derps </a> </li>
+<li class="navitem"> <a href="derp3.html"> EVEN MOAR STINKIN' DERPS!!! </a></li>
+</ul> </nav>
+
+
+<span class="wrap-text"> PAINK!!!! =D </span>
+
+<li class="list"> Hai! :3 </li>
+
+<a href="http://bing.com" onclick="return rood()"> 
+<input type="button" value="y es dis bootoin sow bag!" id="button">
+</a>
+
+<p class="paragraph">O_O
+
+
+"...Wut es dis clusterhouse? Wut em aye un?" Casual viewer - 2016</p>
+
+<p class="paragraph2"> <i> WUT </i> <b> ES </b>HEHPPUNEEEEE<u>EENNNNN</u>!!!!!!!!!!!</p>
+
+<div class="wrap-trivia"> 
+<p>Hu es Taylor?</p>
+<form>
+<div id="response"> </div>
+<input type="radio" name="trivia" value="stl">TB<br>
+<input type="radio" name="trivia" value="kcr">T.B.<br>
+<input type="radio" name="trivia" value="sfg">TeeBee <br>
+<input type="radio" name="trivia" value="nyy">TayBay<br>
+<input type="button" value="soobmet" onclick="answer()">
+</form>
+</div>
+
+
+
+
+<footer> WHEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE!!!!!!!! </footer>
+</body>
+</html>

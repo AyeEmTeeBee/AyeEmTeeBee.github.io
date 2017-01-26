@@ -1,0 +1,120 @@
+
+<html>
+<head>
+<title> JavaScript Practice </title>
+<script>
+function start(){
+var compliment = "a lazy buttbutt that does not deserve any imaginary cookies! >:(";
+var name = "TB";
+alert(name + " is " + compliment);
+add();
+}
+
+function add(){
+alert("Also his name is TB for crying out loud!");
+}
+
+
+//Joke goes here.
+function joke(){
+alert("OK! Here's da joke!!! :D");
+var x = "TayBay! XD";
+joke2(x);
+}
+
+function joke2(x){
+alert(x);
+}
+function spam(){
+alert("derp");
+var x = "derp"
+spam2(x);
+}
+
+function spam2(x){
+alert(x);
+spam();
+}
+
+
+function rate(){
+var q = prompt("From 1 to 10, how much do you like TB?");
+if(q <= 1) {
+alert("THAT IS IT!!! DERP SPAM 4 U!!! >:(");
+spam();
+} else if (q <= 2) {
+alert("Two...TWO!?!?! Out of 10 you picked TWO?!?!?!?!? How about two heat seeking slaps aiming at your face!?!?!");
+} else if (q <= 3) {
+alert("U R ST00PY!!!");
+} else if (q <= 4) {
+alert("U deserve a sentence stampted on your forehead that says 'I have mind cancer and I don't have a life!'");
+} else if (q <= 5) {
+alert("Why did you gave me a 50%?!? That's a failed grade!! D:");
+} else if (q <= 6) {
+alert("...Why...?");
+} else if (q <= 7) {
+alert("It isn't time for prime. Get it? PRIME number?");
+} else if (q <= 8) {
+alert("2 l8 m8! Don't you h8 on my gr8 8 out of 8 face!!");
+} else if (q <= 9) {
+alert("Nu 10? WUT ES RONG WEETH U?!?!?");
+} else if (q = 10) {
+alert("YAY!!!! :3");
+} else if (q > 10) {
+alert("I deserve more than 10. You are right! :3");
+} else {
+alert("U had one job...ONE JOB...!!! Derp spam for u! >:(");
+spam();
+}
+}
+
+
+function change(){
+var edit = document.getElementById("find");
+edit.innerHTML = "This Page is Full of Magic!";
+}
+
+//MATH!!! D: (The horrors...!!)
+function math(){
+var math = 133 * 5324 - 535 / 2 + 123;
+alert(math);
+}
+
+
+
+var pass = 1;
+function toggle(){
+var twitch = document.getElementById("rotate");
+if(pass == 1){
+twitch.innerHTML = "You didn't see anything...";
+pass=2;
+}else if (pass == 2){
+twitch.innerHTML = "<img src='https://simplycoding.org/files/sclogo.png' />";
+pass = 3;
+} else {
+twitch.innerHTML = "This text may change, even into an picture";
+pass = 1;
+}
+}
+
+
+function count(){
+
+}
+</script>
+</head>
+<body>
+<div id="find">My JavaScript Practice Page</div>
+<input type="button" onclick="start()" value="Press Me">
+<input type="button" onclick="joke()" value="Joke">
+<input type="button" onclick="spam()" value="DERP SPAM!!!">
+<input type="button" onclick="math()" value="Math!! D: (The horrors...!!)">
+<input type="button" onclick="rate()" value="Quiz">
+<input type="button" onclick="change()" value="Magic Button">
+<input type="button" onclick="toggle()" value="Change Button">
+<input type="button" onclick="count()" value="While Loop">
+
+
+
+</body>
+</html>
