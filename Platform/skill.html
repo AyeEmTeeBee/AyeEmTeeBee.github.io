@@ -1,0 +1,1975 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Play </title>
+<script src="https://simplycoding.org/files/simplyjs/simply.js"></script>
+<script> 
+
+var array = [];
+
+function start(){
+sjs.open("target",800,500);
+
+var background=new sjs.Image("Images/background.png");
+background.setSize(2500,500);
+sjs.loadImageArray(localStorage.getItem('level'));
+var player = new sjs.Image("Images/r_idle.png");
+player.type = "player";
+player.setSize(65,73);
+player.setHFlipImages('Images/l_idle.png', 'Images/r_idle.png');
+player.setGravity(8);
+player.noBounds = true;
+
+player.friction = .3;
+sjs.scrollable(player,background);
+//Yo moves to the RIGHT son!!
+
+var running = false;
+var charged = false;
+var charging = false;
+var jumping = false;
+var jumpShoot = true;
+var canRain1 = false;
+var canRain2 = false;
+var canFlame = false;
+var canFIAR = true;
+
+window.addEventListener("keyup", function(e){
+if(e.keyCode == RIGHT_KEY){
+player.setImage("Images/r_idle.png");
+r_walk = 1;
+l_walk = 1;
+running = false;
+sprint = false;
+} else if (e.keyCode == LEFT_KEY){
+player.setImage("Images/l_idle.png");
+r_walk = 1;
+l_walk = 1;
+running = false;
+sprint = false;
+} else if (e.keyCode == DOWN_KEY){
+manual = true;
+
+if(charged == true){
+charged = false;
+
+//powah of da LAZAR!!!!!!11111
+
+var lazer = new sjs.Image("Images/blue.png");
+lazer.type = "lazer";
+lazer.setSize(2000,100);
+lazer.friction= 0;
+lazer.noBounds= true;
+
+setTimeout(function(){
+lazer.destroy();
+
+},800);
+
+if(r_facing == true){
+lazer.moveTo(player.getX()-50,player.getY()-20);
+lazer.pushRight(50);
+player.pushLeft(20);
+player.friction = 0.1;
+} else {
+
+lazer.moveTo(player.getX()+-1915,player.getY()-20);
+lazer.pushLeft(50);
+player.pushRight(20);
+player.friction = 0;
+}
+setTimeout(function(){
+player.friction = 0;
+
+},300);
+
+if(charged == true){
+charged = false;
+}
+}
+
+} else if (e.keyCode == G_KEY){
+g_down = false;
+} else if (e.keyCode == V_KEY){
+v_down = false;
+} else if (e.keyCode == B_KEY){
+b_down = false;
+} else if (e.keyCode == H_KEY){
+h_down = false;
+} else if (e.keyCode == F_KEY){
+f_down = false;
+}
+});
+
+//Internal Intervals
+
+setInterval(function(){
+if(running == false){
+sprint = false	
+}
+},10);
+
+setInterval(function(){
+if(sprint == false){
+player.friction = 0.3;
+}
+},10);
+
+setInterval(function(){
+if(charging == false){
+charged = false	
+}
+},10);
+
+sjs.keyDown(LEFT_KEY, function(){
+r_facing = false;
+running = true;
+
+var leftSprint = setTimeout(function(){
+if(running == true){	
+sprint = true
+}
+},3000);
+
+var sprint = false;
+var going = false;
+var l_sprint = 1;
+var l_walk = 1;
+
+window.addEventListener("keyup", function(e){
+if(e.keyCode == LEFT_KEY){
+clearTimeout(leftSprint);	
+}
+});
+
+
+if(sprint == true){
+if(l_sprint == 1){
+player.setImage("Images/l_walk-2.png");
+player.faceLeft();
+player.pushLeft(4.5);
+player.friction = 0.1;
+l_sprint = 2; 
+
+} else if(l_sprint == 2){
+player.setImage("Images/l_walk-6.png");
+player.faceLeft();
+player.pushLeft(4.5);
+player.friction = 0.1;
+
+l_sprint = 1;
+
+}
+
+} else {	
+if(l_walk == 1){
+player.setImage("Images/l_walk-0.png");
+player.faceLeft();
+player.pushLeft(1.5);
+l_walk = 2; 
+} else if (l_walk == 2){
+player.setImage("Images/l_walk-1.png");
+player.faceLeft();
+player.pushLeft(1.5);
+l_walk = 3; 
+} else if (l_walk == 3){
+player.setImage("Images/l_walk-2.png");
+player.faceLeft();
+player.pushLeft(1.5);
+l_walk = 4; 
+} else if (l_walk == 4){
+player.setImage("Images/l_walk-3.png");
+player.faceLeft();
+player.pushLeft(1.5);
+l_walk = 5; 
+} else if (l_walk == 5){
+player.setImage("Images/l_walk-4.png");
+player.faceLeft();
+player.pushLeft(1.5);
+l_walk = 6; 
+} else if (l_walk == 6){
+player.setImage("Images/l_walk-5.png");
+player.faceLeft();
+player.pushLeft(1.5);
+l_walk = 7; 
+} else if (l_walk == 7){
+player.setImage("Images/l_walk-6.png");
+player.faceLeft();
+player.pushLeft(1.5);
+l_walk = 8; 
+} else if (l_walk == 8){
+player.setImage("Images/l_walk-7.png");
+player.faceLeft();
+player.pushLeft(1.5);
+l_walk = 9; 
+} else if (l_walk == 9){
+player.setImage("Images/l_walk-0.png");
+player.faceLeft();
+player.pushLeft(1.5);
+l_walk = 1; 
+} else {
+player.setImage("Images/l_jump.png");
+player.pushLeft(1.5); 
+} 
+}
+});
+var r_sprint = 1;
+var r_walk = 1;
+var r_facing =true;
+
+sjs.keyDown(RIGHT_KEY, function(){
+
+r_facing=true;
+running = true;
+
+var rightSprint = setTimeout(function(){
+if(running == true){	
+sprint = true
+}
+},3000);
+
+
+window.addEventListener("keyup", function(e){
+if(e.keyCode == RIGHT_KEY){
+clearTimeout(rightSprint);	
+}
+});
+
+
+if(sprint == true){
+if(r_sprint == 1){
+player.setImage("Images/r_walk-2.png");
+player.faceRight();
+player.pushRight(4.5);
+player.friction = 0.1;
+
+r_sprint = 2; 
+} else if(r_sprint == 2){
+player.setImage("Images/r_walk-6.png");
+player.faceRight();
+player.pushRight(4.5);
+player.friction = 0.1;
+
+r_sprint = 1;
+}
+} else {
+if(r_walk == 1){
+player.setImage("Images/r_walk-0.png");
+player.faceRight();
+player.pushRight(1.5);
+r_walk = 2; 
+} else if (r_walk == 2){
+player.setImage("Images/r_walk-1.png");
+player.faceRight();
+player.pushRight(1.5);
+r_walk = 3; 
+} else if (r_walk == 3){
+player.setImage("Images/r_walk-2.png");
+player.faceRight();
+player.pushRight(1.5);
+r_walk = 4; 
+} else if (r_walk == 4){
+player.setImage("Images/r_walk-3.png");
+player.faceRight();
+player.pushRight(1.5);
+r_walk = 5; 
+} else if (r_walk == 5){
+player.setImage("Images/r_walk-4.png");
+player.faceRight();
+player.pushRight(1.5);
+r_walk = 6; 
+} else if (r_walk == 6){
+player.setImage("Images/r_walk-5.png");
+player.faceRight();
+player.pushRight(1.5);
+r_walk = 7; 
+} else if (r_walk == 7){
+player.setImage("Images/r_walk-6.png");
+player.faceRight();
+player.pushRight(1.5);
+r_walk = 8; 
+} else if (r_walk == 8){
+player.setImage("Images/r_walk-7.png");
+player.faceRight();
+player.pushRight(1.5);
+r_walk = 9; 
+} else if (r_walk == 9){
+player.setImage("Images/r_walk-0.png");
+player.faceRight();
+player.pushRight(1.5);
+r_walk = 1; 
+} else {
+player.setImage("Images/r_jump.png");
+player.pushRight(1.5); 
+} 
+}
+});
+//JUMP ma boi!!
+var canJump = true;
+sjs.keyDown(UP_KEY, function(){
+if(canJump == true){
+r_walk = 10;
+l_walk = 10;
+canJump = false;
+jumping = true;
+player.pushUp(45);
+player.setGravity(8);
+if(r_facing == true){
+player.setImage("Images/r_jump.png");
+} else { 
+player.setImage("Images/l_jump.png"); 
+}
+}
+});
+
+
+
+
+var playM = new Audio('Music/ova.mp3'); 
+var musicOn = false;
+var toggle = true; 
+sjs.keyDown(K_KEY, function(){
+if(toggle == true){
+if(musicOn == false){
+playM.play();
+musicOn = true;
+} else {
+playM.pause();
+musicOn = false;
+}
+toggle = false;
+setTimeout(function(){
+toggle = true;
+},1000);
+}
+}); 
+
+var manual = true;
+var canShoot = true;
+var flame = false;
+var g_down = false;
+var v_down = false;
+var b_down = false;
+var h_down = false;
+var f_down = false;
+var h_down = false;
+var canShield = true;
+
+sjs.keyDown(G_KEY, function(){
+g_down = true;
+});
+
+sjs.keyDown(V_KEY, function(){
+v_down = true;
+});
+
+sjs.keyDown(B_KEY, function(){
+b_down = true;
+});
+
+sjs.keyDown(F_KEY, function(){
+f_down = true;
+});
+
+sjs.keyDown(H_KEY, function(){
+h_down = true;
+});
+
+//KaShield!!!!
+
+sjs.keyDown(S_KEY, function(){
+
+if(g_down == true && canShield == true){
+canShield = false;
+
+var shield = new sjs.Image("Images/score.gif");
+shield.type = "shieldG";
+shield.setSize(100,100);
+shield.friction = 0;
+shield.noBounds = true;
+shield.moveTo(player.getX()-18,player.getY()-20);
+
+} else if(b_down == true && canShield == true){
+canShield = false;
+
+var shield = new sjs.Image("Images/score.gif");
+shield.type = "shieldB";
+shield.setSize(100,100);
+shield.friction = 0;
+shield.noBounds = true;
+shield.moveTo(player.getX()-18,player.getY()-20);
+
+} else if(f_down == true && canShield == true){
+canShield = false;
+
+var shield = new sjs.Image("Images/score.gif");
+shield.type = "shieldF";
+shield.setSize(100,100);
+shield.friction = 0;
+shield.noBounds = true;
+shield.moveTo(player.getX()-18,player.getY()-20);
+
+} else if(h_down == true && canShield == true){
+canShield = false;
+
+var shield = new sjs.Image("Images/score.gif");
+shield.type = "shieldH";
+shield.setSize(100,100);
+shield.friction = 0;
+shield.noBounds = true;
+shield.moveTo(player.getX()-18,player.getY()-20);
+
+} else if(v_down == true && canShield == true){
+canShield = false;
+
+var shield = new sjs.Image("Images/score.gif");
+shield.type = "shieldV";
+shield.setSize(100,100);
+shield.friction = 0;
+shield.noBounds = true;
+shield.moveTo(player.getX()-18,player.getY()-20);
+}
+});
+
+//Oh...SHOOT!!
+
+sjs.keyDown(DOWN_KEY, function(){
+
+if(g_down == true && v_down == true && jumping == false && manual == true){
+manual = false;
+var laser = new sjs.Image("Images/pink.png");
+laser.type = "laser";
+laser.setSize(20,50);
+laser.friction= 0;
+laser.noBounds= true;
+laser.moveTo(player.getX()+100,0);
+laser.pushDown(41);
+var laser2 = new sjs.Image("Images/pink.png");
+laser2.type = "laser2";
+laser2.setSize(20,50);
+laser2.friction= 0;
+laser2.noBounds= true;
+laser2.moveTo(player.getX()-60,0);
+laser2.pushDown(41);
+
+} else if(g_down == true && b_down == true && jumping == false && canShoot == true){
+manual = false;
+var laser = new sjs.Image("Images/red.png");
+laser.type = "laser";
+laser.setSize(20,50);
+laser.friction= 0;
+laser.noBounds= true;
+laser.moveTo(player.getX()+120,player.getY()+40);
+laser.pushUp(20.5);
+var laser2 = new sjs.Image("Images/red.png");
+laser2.type = "laser2";
+laser2.setSize(20,50);
+laser2.friction= 0;
+laser2.noBounds= true;
+laser2.moveTo(player.getX()-60,player.getY()+40);
+laser2.pushUp(20.5);
+canShoot = false;
+setTimeout(function(){ 
+laser.destroy();
+},200);
+setTimeout(function(){ 
+laser2.destroy();
+},200);
+setTimeout(function(){ 
+canShoot = true;
+},50);
+
+} else if(g_down == true && h_down == true && jumping == false && manual == true){
+manual = false;
+var laser = new sjs.Image("Images/laser.png");
+laser.type = "laser";
+laser.setSize(20,100);
+laser.friction= 0;
+laser.noBounds= true;
+laser.moveTo(player.getX()+100,0);
+laser.pushDown(20.5);
+var laser2 = new sjs.Image("Images/laser.png");
+laser2.type = "laser2";
+laser2.setSize(20,100);
+laser2.friction= 0;
+laser2.noBounds= true;
+laser2.moveTo(player.getX()-60,0);
+laser2.pushDown(20.5);
+var laser3 = new sjs.Image("Images/blue.png");
+laser3.type = "laser3";
+laser3.setSize(20,50);
+laser3.friction= 0;
+laser3.noBounds= true;
+laser3.moveTo(player.getX()-140,player.getY()-383);
+laser3.pushDown(20.5);
+var laser4 = new sjs.Image("Images/blue.png");
+laser4.type = "laser4";
+laser4.setSize(20,50);
+laser4.friction= 0;
+laser4.noBounds= true;
+laser4.moveTo(player.getX()+180,player.getY()-383);
+laser4.pushDown(20.5);
+
+} else if(b_down == true && v_down == true && jumping == false && canShoot == true){
+manual = false;	
+canShoot = false;
+var laser = new sjs.Image("Images/pink.png");
+laser.type = "laser";
+laser.setSize(30,20);
+laser.friction= 0;
+laser.noBounds= true;
+if(r_facing == true){
+laser.moveTo(player.getX()+44,player.getY()+20);
+laser.pushRight(41);
+
+} else {
+laser.moveTo(player.getX()+-20,player.getY()+20);
+laser.pushLeft(41);
+}
+setTimeout(function(){ 
+laser.destroy();
+},200);
+setTimeout(function(){ 
+canShoot = true;
+},50);
+
+} else if(f_down == true && g_down == true && jumping == false && manual == true){
+manual = false;	
+var bomb = new sjs.Image("Images/laser.png");
+bomb.type = "bomb";
+bomb.setSize(20,50);
+bomb.friction= 0;
+bomb.noBounds= true;
+bomb.moveTo(player.getX()+44,player.getY()+7);
+bomb.pushUp(20.5);
+bomb.pushRight(20.5);
+
+var bomb2 = new sjs.Image("Images/laser.png");
+bomb2.type = "bomb2";
+bomb2.setSize(20,50);
+bomb2.friction= 0;
+bomb2.noBounds= true;
+bomb2.moveTo(player.getX()+44,player.getY()+7);
+bomb2.pushUp(20.5);
+bomb2.pushLeft(20.5);
+
+setTimeout(function(){
+var shard1 = new sjs.Image("Images/laser.png");
+shard1.type = "shard1";
+shard1.setSize(10,20);
+shard1.friction= 0;
+shard1.noBounds= true;
+shard1.moveTo(bomb2.getX(),bomb2.getY());
+shard1.pushUp(20.5);
+shard1.pushRight(20.5)
+
+var shard2 = new sjs.Image("Images/laser.png");
+shard2.type = "shard2";
+shard2.setSize(10,20);
+shard2.friction= 0;
+shard2.noBounds= true;
+shard2.moveTo(bomb2.getX(),bomb2.getY());
+shard2.pushUp(20.5);
+shard2.pushLeft(20.5)
+
+var shard3 = new sjs.Image("Images/laser.png");
+shard3.type = "shard3";
+shard3.setSize(10,20);
+shard3.friction= 0;
+shard3.noBounds= true;
+shard3.moveTo(bomb2.getX(),bomb2.getY());
+shard3.pushDown(20.5);
+shard3.pushRight(20.5)
+
+var shard4 = new sjs.Image("Images/laser.png");
+shard4.type = "shard4";
+shard4.setSize(10,20);
+shard4.friction= 0;
+shard4.noBounds= true;
+shard4.moveTo(bomb2.getX(),bomb2.getY());
+shard4.pushDown(20.5);
+shard4.pushLeft(20.5)
+
+bomb2.destroy();
+},250);
+
+setTimeout(function(){
+var shard1 = new sjs.Image("Images/laser.png");
+shard1.type = "shard1";
+shard1.setSize(10,20);
+shard1.friction= 0;
+shard1.noBounds= true;
+shard1.moveTo(bomb.getX(),bomb.getY());
+shard1.pushUp(20.5);
+shard1.pushRight(20.5)
+
+var shard2 = new sjs.Image("Images/laser.png");
+shard2.type = "shard2";
+shard2.setSize(10,20);
+shard2.friction= 0;
+shard2.noBounds= true;
+shard2.moveTo(bomb.getX(),bomb.getY());
+shard2.pushUp(20.5);
+shard2.pushLeft(20.5)
+
+var shard3 = new sjs.Image("Images/laser.png");
+shard3.type = "shard3";
+shard3.setSize(10,20);
+shard3.friction= 0;
+shard3.noBounds= true;
+shard3.moveTo(bomb.getX(),bomb.getY());
+shard3.pushDown(20.5);
+shard3.pushRight(20.5)
+
+var shard4 = new sjs.Image("Images/laser.png");
+shard4.type = "shard4";
+shard4.setSize(10,20);
+shard4.friction= 0;
+shard4.noBounds= true;
+shard4.moveTo(bomb.getX(),bomb.getY());
+shard4.pushDown(20.5);
+shard4.pushLeft(20.5)
+
+bomb.destroy();
+},250);
+
+} else if(f_down == true && v_down == true && jumping == false && manual == true){
+manual = false;	
+var bomb = new sjs.Image("Images/pink.png");
+bomb.type = "bomb";
+bomb.setSize(20,20);
+bomb.friction= 0;
+bomb.noBounds= true;
+bomb.moveTo(player.getX()+44,player.getY()+7);
+bomb.pushUp(20.5);
+
+setTimeout(function(){
+var shard1 = new sjs.Image("Images/pink.png");
+shard1.type = "shard1";
+shard1.setSize(10,10);
+shard1.friction= 0;
+shard1.noBounds= true;
+shard1.moveTo(bomb.getX(),bomb.getY());
+shard1.pushUp(41);
+shard1.pushRight(41)
+
+var shard2 = new sjs.Image("Images/pink.png");
+shard2.type = "shard2";
+shard2.setSize(10,10);
+shard2.friction= 0;
+shard2.noBounds= true;
+shard2.moveTo(bomb.getX(),bomb.getY());
+shard2.pushUp(41);
+shard2.pushLeft(41)
+
+var shard3 = new sjs.Image("Images/pink.png");
+shard3.type = "shard3";
+shard3.setSize(10,10);
+shard3.friction= 0;
+shard3.noBounds= true;
+shard3.moveTo(bomb.getX(),bomb.getY());
+shard3.pushDown(41);
+shard3.pushRight(41)
+
+var shard4 = new sjs.Image("Images/pink.png");
+shard4.type = "shard4";
+shard4.setSize(10,10);
+shard4.friction= 0;
+shard4.noBounds= true;
+shard4.moveTo(bomb.getX(),bomb.getY());
+shard4.pushDown(41);
+shard4.pushLeft(41)
+
+bomb.destroy();
+},250);
+
+//DA FIAR BOMB IS HARE
+
+} else if(f_down == true && b_down == true && jumping == false && manual == true && canFIAR == true){
+manual = false;	
+canFIAR = false;
+
+var bomb = new sjs.Image("Images/red.png");
+bomb.type = "bomb";
+bomb.setSize(20,20);
+bomb.friction= 0;
+bomb.noBounds= true;
+bomb.moveTo(player.getX()+44,player.getY()+7);
+bomb.pushUp(20.5);
+array.push(bomb);
+
+
+setTimeout(function(){
+
+flame = true;
+
+bomb.stop();
+
+
+var FIAR = setInterval(function(){
+
+if(flame == true){
+
+flame = false;
+
+var flame1 = new sjs.Image("Images/red.png");
+flame1.type = "flame1";
+flame1.setSize(10,10);
+flame1.friction= 0;
+flame1.noBounds= true;
+flame1.moveTo(bomb.getX()+5,bomb.getY()+5);
+flame1.pushUp(20.5);
+flame1.pushRight(20.5)
+
+var flame2 = new sjs.Image("Images/red.png");
+flame2.type = "flame2";
+flame2.setSize(10,10);
+flame2.friction= 0;
+flame2.noBounds= true;
+flame2.moveTo(bomb.getX()+5,bomb.getY()+5);
+flame2.pushUp(20.5);
+flame2.pushLeft(20.5)
+
+var flame3 = new sjs.Image("Images/red.png");
+flame3.type = "flame3";
+flame3.setSize(10,10);
+flame3.friction= 0;
+flame3.noBounds= true;
+flame3.moveTo(bomb.getX()+5,bomb.getY()+5);
+flame3.pushDown(20.5);
+flame3.pushRight(20.5)
+
+var flame4 = new sjs.Image("Images/red.png");
+flame4.type = "flame4";
+flame4.setSize(10,10);
+flame4.friction= 0;
+flame4.noBounds= true;
+flame4.moveTo(bomb.getX()+5,bomb.getY()+5);
+flame4.pushDown(20.5);
+flame4.pushLeft(20.5)
+
+if(f_down == true){
+
+setTimeout(function(){ 
+flame1.destroy();
+},200);
+setTimeout(function(){ 
+flame2.destroy();
+},200);
+setTimeout(function(){ 
+flame3.destroy();
+},200);
+setTimeout(function(){ 
+flame4.destroy();
+},200);
+setTimeout(function(){ 
+flame = true;
+},50);
+
+} else {
+bomb.destroy();
+flame = false;
+canFIAR = true;
+clearInterval(FIAR);
+}
+}
+},5);
+},250);
+//nd seit tymeut funceion
+
+} else if(h_down == true && v_down == true && jumping == false && manual == true){ 
+manual = false;
+charging = true;
+
+var laser = new sjs.Image("Images/pink.png");
+laser.type = "laser";
+laser.setSize(30,20);
+laser.friction= 0;
+laser.noBounds= true;
+if(r_facing == true){
+laser.moveTo(player.getX()+60,player.getY()+7);
+laser.pushRight(41);
+} else {
+laser.moveTo(player.getX()+-10,player.getY()+7);
+laser.pushLeft(41);
+}
+
+var laser = new sjs.Image("Images/pink.png");
+laser.type = "laser2";
+laser.setSize(30,20);
+laser.friction= 0;
+laser.noBounds= true;
+if(r_facing == true){
+laser.moveTo(player.getX()+60,player.getY()+7);
+laser.pushRight(41);
+laser.pushUp(20);
+} else {
+laser.moveTo(player.getX()+-10,player.getY()+7);
+laser.pushLeft(41);
+laser.pushUp(20);
+}
+
+var laser = new sjs.Image("Images/pink.png");
+laser.type = "laser3";
+laser.setSize(30,20);
+laser.friction= 0;
+laser.noBounds= true;
+if(r_facing == true){
+laser.moveTo(player.getX()+60,player.getY()+7);
+laser.pushRight(41);
+laser.pushDown(20);
+} else {
+laser.moveTo(player.getX()+-10,player.getY()+7);
+laser.pushLeft(41);
+laser.pushDown(20);
+}
+
+} else if(f_down == true && h_down == true && jumping == false && manual == true){
+manual = false;	
+var bomb = new sjs.Image("Images/green.png");
+bomb.type = "bomb";
+bomb.setSize(20,20);
+bomb.friction= 0;
+bomb.noBounds= true;
+bomb.moveTo(player.getX()+44,player.getY()+7);
+bomb.pushUp(20.5);
+
+setTimeout(function(){
+var shard1 = new sjs.Image("Images/green.png");
+shard1.type = "shard1";
+shard1.setSize(10,10);
+shard1.friction= 0;
+shard1.noBounds= true;
+shard1.moveTo(bomb.getX(),bomb.getY());
+shard1.pushUp(20.5);
+shard1.pushRight(20.5)
+
+var shard2 = new sjs.Image("Images/green.png");
+shard2.type = "shard2";
+shard2.setSize(10,10);
+shard2.friction= 0;
+shard2.noBounds= true;
+shard2.moveTo(bomb.getX(),bomb.getY());
+shard2.pushUp(20.5);
+shard2.pushLeft(20.5)
+
+var shard3 = new sjs.Image("Images/green.png");
+shard3.type = "shard3";
+shard3.setSize(10,10);
+shard3.friction= 0;
+shard3.noBounds= true;
+shard3.moveTo(bomb.getX(),bomb.getY());
+shard3.pushDown(20.5);
+shard3.pushRight(20.5)
+
+var shard4 = new sjs.Image("Images/green.png");
+shard4.type = "shard4";
+shard4.setSize(10,10);
+shard4.friction= 0;
+shard4.noBounds= true;
+shard4.moveTo(bomb.getX(),bomb.getY());
+shard4.pushDown(20.5);
+shard4.pushLeft(20.5)
+
+var shard5 = new sjs.Image("Images/blue.png");
+shard5.type = "shard5";
+shard5.setSize(10,10);
+shard5.friction= 0;
+shard5.noBounds= true;
+shard5.moveTo(bomb.getX(),bomb.getY());
+shard5.pushDown(20.5);
+
+var shard6 = new sjs.Image("Images/blue.png");
+shard6.type = "shard6";
+shard6.setSize(10,10);
+shard6.friction= 0;
+shard6.noBounds= true;
+shard6.moveTo(bomb.getX(),bomb.getY());
+shard6.pushUp(20.5);
+
+var shard7 = new sjs.Image("Images/blue.png");
+shard7.type = "shard7";
+shard7.setSize(10,10);
+shard7.friction= 0;
+shard7.noBounds= true;
+shard7.moveTo(bomb.getX(),bomb.getY());
+shard7.pushLeft(20.5);
+
+var shard8 = new sjs.Image("Images/blue.png");
+shard8.type = "shard8";
+shard8.setSize(10,10);
+shard8.friction= 0;
+shard8.noBounds= true;
+shard8.moveTo(bomb.getX(),bomb.getY());
+shard8.pushRight(20.5);
+
+bomb.destroy();
+},250);
+
+} else if(b_down == true && canShoot == true && jumping == false && h_down == true && f_down == false){
+manual = false;	
+canShoot = false;
+var laser = new sjs.Image("Images/red.png");
+laser.type = "laser";
+laser.setSize(30,20);
+laser.friction= 0;
+laser.noBounds= true;
+if(r_facing == true){
+laser.moveTo(player.getX()+44,player.getY()+20);
+laser.pushRight(20.5);
+
+} else {
+laser.moveTo(player.getX()+-20,player.getY()+20);
+laser.pushLeft(20.5);
+}
+setTimeout(function(){ 
+laser.destroy();
+},200);
+
+var laser2 = new sjs.Image("Images/blue.png");
+laser2.type = "laser2";
+laser2.setSize(30,20);
+laser2.friction= 0;
+laser2.noBounds= true;
+if(r_facing == true){
+laser2.moveTo(player.getX()+44,player.getY()+20);
+laser2.pushRight(20.5);
+laser2.pushDown(10);
+
+} else {
+laser2.moveTo(player.getX()+-20,player.getY()+20);
+laser2.pushLeft(20.5);
+laser2.pushDown(10);
+}
+setTimeout(function(){ 
+laser2.destroy();
+},200);
+
+var laser3 = new sjs.Image("Images/blue.png");
+laser3.type = "laser3";
+laser3.setSize(30,20);
+laser3.friction= 0;
+laser3.noBounds= true;
+if(r_facing == true){
+laser3.moveTo(player.getX()+44,player.getY()+20);
+laser3.pushRight(20.5);
+laser3.pushUp(10);
+
+} else {
+laser3.moveTo(player.getX()+-20,player.getY()+20);
+laser3.pushLeft(20.5);
+laser3.pushUp(10);
+}
+setTimeout(function(){ 
+laser3.destroy();
+},200);
+setTimeout(function(){ 
+canShoot = true;
+},50);
+
+} else if(jumping == true && b_down == true && canShoot == true){ 
+manual = false;
+canShoot = false;
+
+var laser = new sjs.Image("Images/red.png");
+laser.type = "laser";
+laser.setSize(20,30);
+laser.friction= 0;
+laser.noBounds= true;
+laser.pushDown(20.5);
+laser.moveTo(player.getX()+20,player.getY()+40);
+player.pushUp(15);
+player.friction = 0.1;
+
+setTimeout(function(){ 
+jumping = false;
+},800);
+
+setTimeout(function(){ 
+laser.destroy();
+},200);
+setTimeout(function(){ 
+canShoot = true;
+},50);
+
+} else if(g_down == true && jumping == true && manual == true){
+manual = false;
+var tramp = new sjs.Image("Images/laser.png");
+tramp.type = "tramp";
+tramp.setSize(20,100);
+tramp.friction= 0;
+tramp.noBounds= true;
+tramp.moveTo(player.getX()+10,+100);
+tramp.pushUp(20.5);
+
+} else if(g_down == true && jumping == false && manual == true){
+manual = false;
+var laser = new sjs.Image("Images/laser.png");
+laser.type = "laser";
+laser.setSize(20,100);
+laser.friction= 0;
+laser.noBounds= true;
+laser.moveTo(player.getX()+100,0);
+laser.pushDown(20.5);
+var laser2 = new sjs.Image("Images/laser.png");
+laser2.type = "laser2";
+laser2.setSize(20,100);
+laser2.friction= 0;
+laser2.noBounds= true;
+laser2.moveTo(player.getX()-60,0);
+laser2.pushDown(20.5);
+
+} else if(jumping == true && jumpShoot == true && v_down == true&& manual == true){ 
+manual = false;
+jumpShoot = false;
+
+var laser = new sjs.Image("Images/pink.png");
+laser.type = "laser";
+laser.setSize(20,50);
+laser.friction= 0;
+laser.noBounds= true;
+
+laser.moveTo(player.getX()+20,player.getY()+40);
+player.pushUp(40.5)
+laser.pushDown(41);
+
+setTimeout(function(){
+jumpShoot = true;
+},250);
+
+} else if(v_down == true && jumping == false && manual == true){
+manual = false;
+var laser = new sjs.Image("Images/pink.png");
+laser.type = "laser";
+laser.setSize(40,20);
+laser.friction= 0;
+laser.noBounds= true;
+if(r_facing == true){
+laser.moveTo(player.getX()+44,player.getY()+20);
+laser.pushRight(41);
+} else {
+laser.moveTo(player.getX()+-20,player.getY()+20);
+laser.pushLeft(41);
+} 
+
+} else if(b_down == true && jumping == false && canShoot == true && f_down == false){
+manual = false;	
+canShoot = false;
+var laser = new sjs.Image("Images/red.png");
+laser.type = "laser";
+laser.setSize(30,20);
+laser.friction= 0;
+laser.noBounds= true;
+if(r_facing == true){
+laser.moveTo(player.getX()+44,player.getY()+20);
+laser.pushRight(20.5);
+
+} else {
+laser.moveTo(player.getX()+-20,player.getY()+20);
+laser.pushLeft(20.5);
+}
+setTimeout(function(){ 
+laser.destroy();
+},200);
+setTimeout(function(){ 
+canShoot = true;
+},50);
+
+} else if(f_down == true && canFIAR == true && jumping == false && manual == true){
+manual = false;	
+var bomb = new sjs.Image("Images/green.png");
+bomb.type = "bomb";
+bomb.setSize(20,20);
+bomb.friction= 0;
+bomb.noBounds= true;
+bomb.moveTo(player.getX()+44,player.getY()+7);
+bomb.pushUp(20.5);
+
+setTimeout(function(){
+var shard1 = new sjs.Image("Images/green.png");
+shard1.type = "shard1";
+shard1.setSize(10,10);
+shard1.friction= 0;
+shard1.noBounds= true;
+shard1.moveTo(bomb.getX(),bomb.getY());
+shard1.pushUp(20.5);
+shard1.pushRight(20.5)
+
+var shard2 = new sjs.Image("Images/green.png");
+shard2.type = "shard2";
+shard2.setSize(10,10);
+shard2.friction= 0;
+shard2.noBounds= true;
+shard2.moveTo(bomb.getX(),bomb.getY());
+shard2.pushUp(20.5);
+shard2.pushLeft(20.5)
+
+var shard3 = new sjs.Image("Images/green.png");
+shard3.type = "shard3";
+shard3.setSize(10,10);
+shard3.friction= 0;
+shard3.noBounds= true;
+shard3.moveTo(bomb.getX(),bomb.getY());
+shard3.pushDown(20.5);
+shard3.pushRight(20.5)
+
+var shard4 = new sjs.Image("Images/green.png");
+shard4.type = "shard4";
+shard4.setSize(10,10);
+shard4.friction= 0;
+shard4.noBounds= true;
+shard4.moveTo(bomb.getX(),bomb.getY());
+shard4.pushDown(20.5);
+shard4.pushLeft(20.5)
+
+bomb.destroy();
+},250);
+
+} else if(h_down == true && jumping == false && manual == true){ 
+manual = false;
+charging = true;
+
+var laser = new sjs.Image("Images/blue.png");
+laser.type = "laser";
+laser.setSize(30,20);
+laser.friction= 0;
+laser.noBounds= true;
+if(r_facing == true){
+laser.moveTo(player.getX()+60,player.getY()+20);
+laser.pushRight(20.5);
+} else {
+laser.moveTo(player.getX()+-10,player.getY()+20);
+laser.pushLeft(20.5);
+}
+
+var laser = new sjs.Image("Images/blue.png");
+laser.type = "laser2";
+laser.setSize(30,20);
+laser.friction= 0;
+laser.noBounds= true;
+if(r_facing == true){
+laser.moveTo(player.getX()+60,player.getY()+20);
+laser.pushRight(20.5);
+laser.pushUp(10);
+} else {
+laser.moveTo(player.getX()+-10,player.getY()+20);
+laser.pushLeft(20.5);
+laser.pushUp(10);
+}
+
+var laser = new sjs.Image("Images/blue.png");
+laser.type = "laser3";
+laser.setSize(30,20);
+laser.friction= 0;
+laser.noBounds= true;
+if(r_facing == true){
+laser.moveTo(player.getX()+60,player.getY()+20);
+laser.pushRight(20.5);
+laser.pushDown(10);
+} else {
+laser.moveTo(player.getX()+-10,player.getY()+20);
+laser.pushLeft(20.5);
+laser.pushDown(10);
+}
+
+} else if(manual == true && jumping == false){ 
+manual = false;
+charging = true;
+
+var laser = new sjs.Image("Images/blue.png");
+laser.type = "laser";
+laser.setSize(50,30);
+laser.friction= 0;
+laser.noBounds= true;
+if(r_facing == true){
+laser.moveTo(player.getX()+60,player.getY()+12);
+laser.pushRight(20.5);
+} else {
+laser.moveTo(player.getX()+-10,player.getY()+12);
+laser.pushLeft(20.5);
+}
+var Chargin = setTimeout(function(){
+if(charging == true){	
+charged = true;
+}
+},1000);
+
+
+window.addEventListener("keyup", function(e){
+if(e.keyCode == DOWN_KEY){
+clearTimeout(Chargin);
+charging = false;
+}
+});
+}
+});
+
+//Player styled nonsensical onhit
+
+sjs.onHit("player","platform", function(x,y){
+sjs.stoppedBy(x,y);
+});
+sjs.onHit("player","platform", function(x,y){
+sjs.stoppedBy(x,y);
+});
+var canShoot = true;
+sjs.onHit("player","powerUp", function(x,y){
+canShoot = true;
+y.destroy();
+});
+sjs.onHit("player","left_screen", function(x,y){
+x.moveTo(y.getX()+2400,y.getY()+400);
+});
+sjs.onHit("player","right_screen", function(x,y){
+x.moveTo(y.getX()-2500,y.getY()+400);
+});
+sjs.onHit("player","bottom_screen", function(x,y){
+sjs.stoppedBy(x,y);
+canJump = true;
+if (jumping = true){
+jumping = false;
+if(r_facing == true){
+player.setImage("Images/r_idle.png");
+} else { 
+player.setImage("Images/l_idle.png"); 
+}
+}
+});
+sjs.onHit("enemy","bottom_screen", function(x,y){
+sjs.stoppedBy(x,y);
+});
+sjs.onHit("enemy",["left_screen","right_screen"], function(x,y){
+sjs.bounceOff(x,y);
+});
+sjs.onHit("enemy","platform", function(x,y){
+if(x.isAboveOf(y) == true){
+sjs.stoppedBy(x,y); 
+} else {
+sjs.bounceOff(x,y); 
+}
+});
+
+//MAKE IT RAAAIIIINN!!!!
+
+sjs.onHit(["laser","laser2","laser3","laser4","shard1","shard2","shard3","shard4","shard5","shard6","shard7","shard8","flame1","flame2","flame3","flame4","enemy"],"shieldG", function(x,y){
+x.destroy();
+canRain1 = true;
+canRain2 = true;
+var arch = new sjs.Image("Images/laser.png");
+arch.type = "arch";
+arch.setSize(50,80);
+arch.friction = 0;
+arch.setGravity(0.6);
+arch.noBounds = true;
+arch.moveTo(y.getX()+60,y.getY()+30);
+arch.pushUp(15);
+arch.pushRight(20);
+
+var arch2 = new sjs.Image("Images/laser.png");
+arch2.type = "arch2";
+arch2.setSize(50,80);
+arch2.friction = 0;
+arch2.setGravity(0.5);
+arch2.noBounds = true;
+arch2.moveTo(y.getX()+10,y.getY()+30);
+arch2.pushUp(15);
+arch2.pushLeft(20);
+
+var raining1 = setInterval(function(){
+var rain1 = new sjs.Image("Images/laser.png");
+rain1.type = "rain1";
+rain1.setSize(15,50);
+rain1.friction = 0;
+rain1.setGravity(0.6);
+rain1.noBounds = true;
+rain1.moveTo(arch.getX(),arch.getY());
+rain1.pushUp(10);
+if(canRain1 == false){
+clearInterval(raining1);
+}
+},150);
+
+var raining2 = setInterval(function(){
+var rain2 = new sjs.Image("Images/laser.png");
+rain2.type = "rain2";
+rain2.setSize(15,50);
+rain2.friction = 0;
+rain2.setGravity(0.6);
+rain2.noBounds = true;
+rain2.moveTo(arch2.getX(),arch2.getY());
+rain2.pushUp(10);
+if(canRain2 == false){
+clearInterval(raining2);
+}
+},150);
+
+y.destroy();
+
+setTimeout(function(){
+canShield = true;
+},4500);
+
+});
+
+//Napalm...basicaly a napalm
+
+sjs.onHit(["laser","laser2","laser3","laser4","shard1","shard2","shard3","shard4","shard5","shard6","shard7","shard8","flame1","flame2","flame3","flame4","enemy"],"shieldB", function(x,y){
+x.destroy();
+canFlame = true;
+var flameShard = new sjs.Image("Images/red.png");
+flameShard.type = "flameShard";
+flameShard.setSize(20,20);
+flameShard.friction = 0.1;
+flameShard.setGravity(0.9);
+flameShard.noBounds = true;
+flameShard.moveTo(y.getX()+50,y.getY());
+flameShard.pushRight(7);
+
+var flameShard2 = new sjs.Image("Images/red.png");
+flameShard2.type = "flameShard2";
+flameShard2.setSize(20,20);
+flameShard2.friction = 0.1;
+flameShard2.setGravity(0.9);
+flameShard2.noBounds = true;
+flameShard2.moveTo(y.getX()+10,y.getY());
+flameShard2.pushLeft(7);
+
+var flameShard3 = new sjs.Image("Images/red.png");
+flameShard3.type = "flameShard3";
+flameShard3.setSize(20,20);
+flameShard3.friction = 0.1;
+flameShard3.setGravity(0.9);
+flameShard3.noBounds = true;
+flameShard3.moveTo(y.getX()+50,y.getY());
+flameShard3.pushRight(20);
+
+var flameShard4 = new sjs.Image("Images/red.png");
+flameShard4.type = "flameShard4";
+flameShard4.setSize(20,20);
+flameShard4.friction = 0.1;
+flameShard4.setGravity(0.9);
+flameShard4.noBounds = true;
+flameShard4.moveTo(y.getX()+10,y.getY());
+flameShard4.pushLeft(20);
+
+setTimeout(function(){
+
+var flaming1 = setInterval(function(){
+var sflame1 = new sjs.Image("Images/red.png");
+sflame1.type = "sflame1";
+sflame1.setSize(20,50);
+sflame1.friction = 0;
+sflame1.setGravity(0.6);
+sflame1.noBounds = true;
+sflame1.moveTo(flameShard.getX(),flameShard.getY());
+sflame1.pushUp(20.5);
+setTimeout(function(){ 
+sflame1.destroy();
+},400);
+if(canFlame == false){
+clearInterval(flaming1);
+}
+},100);
+
+var flaming2 = setInterval(function(){
+var sflame2 = new sjs.Image("Images/red.png");
+sflame2.type = "sflame2";
+sflame2.setSize(20,50);
+sflame2.friction = 0;
+sflame2.setGravity(0.6);
+sflame2.noBounds = true;
+sflame2.moveTo(flameShard2.getX(),flameShard2.getY());
+sflame2.pushUp(20.5);
+setTimeout(function(){ 
+sflame2.destroy();
+},400);
+if(canFlame == false){
+clearInterval(flaming2);
+}
+},100);
+
+var flaming3 = setInterval(function(){
+var sflame3 = new sjs.Image("Images/red.png");
+sflame3.type = "sflame3";
+sflame3.setSize(20,50);
+sflame3.friction = 0;
+sflame3.setGravity(0.6);
+sflame3.noBounds = true;
+sflame3.moveTo(flameShard3.getX(),flameShard3.getY());
+sflame3.pushUp(20.5);
+setTimeout(function(){ 
+sflame3.destroy();
+},400);
+if(canFlame == false){
+clearInterval(flaming3);
+}
+},100);
+
+var flaming4 = setInterval(function(){
+var sflame4 = new sjs.Image("Images/red.png");
+sflame4.type = "sflame4";
+sflame4.setSize(20,50);
+sflame4.friction = 0;
+sflame4.setGravity(0.6);
+sflame4.noBounds = true;
+sflame4.moveTo(flameShard4.getX(),flameShard4.getY());
+sflame4.pushUp(20.5);
+setTimeout(function(){ 
+sflame4.destroy();
+},400);
+if(canFlame == false){
+clearInterval(flaming4);
+}
+},100);
+
+setTimeout(function(){
+canFlame = false;
+flameShard.destroy();
+flameShard2.destroy();
+flameShard3.destroy();
+flameShard4.destroy();
+canShield = true;
+},4500);
+
+},1000);
+
+
+y.destroy();
+
+});
+
+//moo...
+
+sjs.onHit(["laser","laser2","laser3","laser4","shard1","shard2","shard3","shard4","shard5","shard6","shard7","shard8","flame1","flame2","flame3","flame4","enemy"],"shieldF", function(x,y){
+x.destroy();
+var bomb2 = new sjs.Image("Images/green.png");
+bomb2.type = "bomb2";
+bomb2.setSize(40,40);
+bomb2.friction = 0;
+bomb2.noBounds = true;
+bomb2.moveTo(y.getX()+60,y.getY()+40);
+bomb2.pushUp(20);
+
+y.destroy();
+setTimeout(function(){
+bomb2.stop();
+setTimeout(function(){
+
+var miniBomb = new sjs.Image("Images/green.png");
+miniBomb.type = "miniBomb";
+miniBomb.setSize(30,30);
+miniBomb.friction = 0;
+miniBomb.noBounds = true;
+miniBomb.moveTo(bomb2.getX(),bomb2.getY());
+miniBomb.pushDown(10);
+miniBomb.pushLeft(10);
+
+var miniBomb2 = new sjs.Image("Images/green.png");
+miniBomb2.type = "miniBomb2";
+miniBomb2.setSize(30,30);
+miniBomb2.friction = 0;
+miniBomb2.noBounds = true;
+miniBomb2.moveTo(bomb2.getX(),bomb2.getY());
+miniBomb2.pushDown(10);
+miniBomb2.pushRight(10);
+
+bomb2.destroy();
+
+setTimeout(function(){
+miniBomb.stop();
+miniBomb2.stop();
+setTimeout(function(){
+
+var microBomb = new sjs.Image("Images/green.png");
+microBomb.type = "microBomb";
+microBomb.setSize(20,20);
+microBomb.friction = 0;
+microBomb.noBounds = true;
+microBomb.moveTo(miniBomb.getX(),miniBomb.getY());
+microBomb.pushDown(10);
+microBomb.pushLeft(10);
+
+var microBomb2 = new sjs.Image("Images/green.png");
+microBomb2.type = "microBomb2";
+microBomb2.setSize(20,20);
+microBomb2.friction = 0;
+microBomb2.noBounds = true;
+microBomb2.moveTo(miniBomb.getX(),miniBomb.getY());
+microBomb2.pushDown(10);
+microBomb2.pushRight(10);
+
+var microBomb3 = new sjs.Image("Images/green.png");
+microBomb3.type = "microBomb3";
+microBomb3.setSize(20,20);
+microBomb3.friction = 0;
+microBomb3.noBounds = true;
+microBomb3.moveTo(miniBomb2.getX(),miniBomb2.getY());
+microBomb3.pushDown(10);
+microBomb3.pushLeft(10);
+
+var microBomb4 = new sjs.Image("Images/green.png");
+microBomb4.type = "microBomb4";
+microBomb4.setSize(20,20);
+microBomb4.friction = 0;
+microBomb4.noBounds = true;
+microBomb4.moveTo(miniBomb2.getX(),miniBomb2.getY());
+microBomb4.pushDown(10);
+microBomb4.pushRight(10);
+
+miniBomb.destroy();
+miniBomb2.destroy();
+
+setTimeout(function(){
+microBomb.stop();
+microBomb2.stop();
+microBomb3.stop();
+microBomb4.stop();
+setTimeout(function(){
+
+var shrapnel = new sjs.Image("Images/green.png");
+shrapnel.type = "shrapnel";
+shrapnel.setSize(10,10);
+shrapnel.friction = 0;
+shrapnel.noBounds = true;
+shrapnel.moveTo(microBomb.getX(),microBomb.getY());
+shrapnel.pushDown(10);
+shrapnel.pushLeft(10);
+
+var shrapnel2 = new sjs.Image("Images/green.png");
+shrapnel2.type = "shrapnel2";
+shrapnel2.setSize(10,10);
+shrapnel2.friction = 0;
+shrapnel2.noBounds = true;
+shrapnel2.moveTo(microBomb.getX(),microBomb.getY());
+shrapnel2.pushDown(10);
+shrapnel2.pushRight(10);
+
+var shrapnel3 = new sjs.Image("Images/green.png");
+shrapnel3.type = "shrapnel3";
+shrapnel3.setSize(10,10);
+shrapnel3.friction = 0;
+shrapnel3.noBounds = true;
+shrapnel3.moveTo(microBomb2.getX(),microBomb2.getY());
+shrapnel3.pushDown(10);
+shrapnel3.pushLeft(10);
+
+var shrapnel4 = new sjs.Image("Images/green.png");
+shrapnel4.type = "shrapnel4";
+shrapnel4.setSize(10,10);
+shrapnel4.friction = 0;
+shrapnel4.noBounds = true;
+shrapnel4.moveTo(microBomb2.getX(),microBomb2.getY());
+shrapnel4.pushDown(10);
+shrapnel4.pushRight(10);
+
+var shrapnel5 = new sjs.Image("Images/green.png");
+shrapnel5.type = "shrapnel5";
+shrapnel5.setSize(10,10);
+shrapnel5.friction = 0;
+shrapnel5.noBounds = true;
+shrapnel5.moveTo(microBomb3.getX(),microBomb3.getY());
+shrapnel5.pushDown(10);
+shrapnel5.pushLeft(10);
+
+var shrapnel6 = new sjs.Image("Images/green.png");
+shrapnel6.type = "shrapnel6";
+shrapnel6.setSize(10,10);
+shrapnel6.friction = 0;
+shrapnel6.noBounds = true;
+shrapnel6.moveTo(microBomb3.getX(),microBomb3.getY());
+shrapnel6.pushDown(10);
+shrapnel6.pushRight(10);
+
+var shrapnel7 = new sjs.Image("Images/green.png");
+shrapnel7.type = "shrapnel7";
+shrapnel7.setSize(10,10);
+shrapnel7.friction = 0;
+shrapnel7.noBounds = true;
+shrapnel7.moveTo(microBomb4.getX(),microBomb4.getY());
+shrapnel7.pushDown(10);
+shrapnel7.pushLeft(10);
+
+var shrapnel8 = new sjs.Image("Images/green.png");
+shrapnel8.type = "shrapnel8";
+shrapnel8.setSize(10,10);
+shrapnel8.friction = 0;
+shrapnel8.noBounds = true;
+shrapnel8.moveTo(microBomb4.getX(),microBomb4.getY());
+shrapnel8.pushDown(10);
+shrapnel8.pushRight(10);
+
+microBomb.destroy();
+microBomb2.destroy();
+microBomb3.destroy();
+microBomb4.destroy();
+
+setTimeout(function(){
+canShield = true;
+},1500);
+},200);
+},300);
+},200);
+},400);
+},200);
+},600);
+});
+
+//BounceBounceBounceBounce!!!
+
+sjs.onHit(["laser","laser2","laser3","laser4","shard1","shard2","shard3","shard4","shard5","shard6","shard7","shard8","flame1","flame2","flame3","flame4","enemy"],"shieldH", function(x,y){
+x.destroy();
+
+var shots = [];
+
+for(var i = 0; i<39; i ++) {
+var shot = new sjs.Image("Images/blue.png");
+shot.type = "shot";
+shot.setSize(10,10);
+shot.friction = 0;
+shot.setGravity(2);
+shot.noBounds = true;
+shot.moveTo(y.getX()+60,y.getY()+35);
+shot.pushUp(5 * Math.sin(i*(Math.PI*2/39)));
+shot.pushRight(15 * Math.cos(i*(Math.PI*2/39)));
+shots.push(shot);	
+}
+
+y.destroy();
+
+setTimeout(function(){
+	for(var i = 0; i<39; i ++) {
+		shots[i].destroy();
+	}
+canShield = true;
+},3000);
+});
+
+//Capable of anihilating anything in its grasp three-folds
+
+sjs.onHit(["laser","laser2","laser3","laser4","shard1","shard2","shard3","shard4","shard5","shard6","shard7","shard8","flame1","flame2","flame3","flame4","enemy"],"shieldV", function(x,y){
+x.destroy();
+
+var signal = new sjs.Image("Images/pink.png");
+signal.type = "signal";
+signal.setSize(20,50);
+signal.friction = 0;
+signal.noBounds = true;
+signal.moveTo(y.getX()+50,y.getY()+40);
+signal.pushUp(41);
+
+y.destroy();
+
+setTimeout(function(){
+var skyShot = new sjs.Image("Images/pink.png");
+skyShot.type = "skyShot"
+skyShot.setSize(50,10000)
+skyShot.friction = 0;
+skyShot.noBounds = true;
+skyShot.moveTo(signal.getX()-17,signal.getY()-2000);
+skyShot.pushDown(41);
+
+signal.destroy();
+
+setTimeout(function(){
+var skyShot2 = new sjs.Image("Images/pink.png");
+skyShot2.type = "skyShot2"
+skyShot2.setSize(100,10000)
+skyShot2.friction = 0;
+skyShot2.noBounds = true;
+skyShot2.moveTo(skyShot.getX()-25,skyShot.getY()-2000);
+skyShot2.pushDown(41);
+
+setTimeout(function(){
+var skyShot3 = new sjs.Image("Images/pink.png");
+skyShot3.type = "skyShot3"
+skyShot3.setSize(150,10000)
+skyShot3.friction = 0;
+skyShot3.noBounds = true;
+skyShot3.moveTo(skyShot.getX()-50,skyShot.getY()-5000);
+skyShot3.pushDown(41);
+
+setTimeout(function(){
+skyShot.destroy();
+skyShot2.destroy();
+skyShot3.destroy();
+
+canShield = true;
+},5500);
+},1000);
+},1000);
+},2000);
+});
+
+//Onhit nonsense
+
+sjs.onHit(["laser","laser2","laser3","laser4","shard1","shard2","shard3","shard4","shard5","shard6","shard7","shard8","flame1","flame2","flame3","flame4"],"platform", function(x,y){
+x.destroy();
+});
+sjs.onHit("player","jump_pad", function(x,y){
+	if(x.isAboveOf(y) == true){
+		player.pushUp(50);
+} else {
+sjs.stoppedBy(x,y);
+}
+});
+sjs.onHit("player","enemy", function(x,y){
+if(sprint == true){
+y.destroy();
+}
+});
+sjs.onHit(["enemy","flameShard","flameShard2","flameShard3","flameShard4"],"bottom_screen", function(x,y){
+sjs.stoppedBy(x,y);
+});
+sjs.onHit("enemy",["left_screen","right_screen"], function(x,y){
+sjs.bounceOff(x,y);
+});
+sjs.onHit("enemy","platform", function(x,y){
+if(x.isAboveOf(y) == true){
+sjs.stoppedBy(x,y); 
+} else {
+sjs.bounceOff(x,y); 
+}
+});
+sjs.onHit(["laser","laser2","laser3","laser4","shard1","shard2","shard3","shard4","shard5","shard6","shard7","shard8","flame1","flame2","flame3","flame4"],"enemy", function(x,y){
+x.destroy();
+y.destroy();
+});
+sjs.onHit(["laser","laser2","laser3","laser4","shard1","shard2","shard3","shard4","shard5","shard6","shard7","shard8","flame1","flame2","flame3","flame4","arch","arch2","shrapnel","shrapnel2","shrapnel3","shrapnel4","shrapnel5","shrapnel6","shrapnel7","shrapnel8"],["right_screen","left_screen","bottom_screen","top_screen"], function(x,y){
+x.destroy();
+});
+sjs.onHit("range",["enemy","boss","player","tmb"],function(x,y){   
+if(x.fire == true){   
+var gbullet = new   
+sjs.Image("Images/bullet.png");   
+gbullet.type="bullet"; 
+gbullet.moveTo(x.getX()+260,x.getY()+10); 
+gbullet.setSize(40,10); 
+gbullet.friction=0; 
+gbullet.pushLeft(6); 
+gbullet.noBounds=true; 
+x.fire = false; 
+setTimeout(function(){ 
+gbullet.destroy(); 
+x.fire=true; 
+},x.firerate);       
+}   
+});  
+sjs.onHit("flyrange",["fliers","enemy","boss","player","tmb"],function(x,y){   
+    if(x.fire == true){   
+         var gbullet = new sjs.Image("Images/bullet.png"); 
+         gbullet.type="gbullet"; 
+         gbullet.moveTo(x.getX()+585,x.getY()+450); 
+         gbullet.setSize(40, 10); 
+         gbullet.friction=0; 
+         gbullet.noBounds=true; 
+
+         var badguy = enemies.reduce(function(badguy,closest){ 
+              if(distance(badguy,flyguy) < distance(closest,flyguy)){ 
+                   return badguy;       
+              } else { 
+                   return closest; 
+              } 
+         }); 
+
+
+
+         var dx = y.getX()*1.07 - x.flyguy.x;   
+         var dy = y.getY() - x.flyguy.y;
+
+         var angle = Math.atan2(dy, dx);   
+         gbullet.pushRight(17*Math.cos(angle));   
+         gbullet.pushDown(17*Math.sin(angle)); 
+
+         x.fire = false; 
+         setTimeout(function(){ 
+              gbullet.destroy(); 
+              x.fire=true; 
+         },1300);       
+
+    }   
+}); 
+sjs.onHit("shot",["right_screen","left_screen","bottom_screen","top_screen"], function(x,y){
+sjs.bounceOff(x,y);
+});
+
+sjs.onHit("arch",["right_screen","left_screen","bottom_screen","top_screen"], function(x,y){
+x.destroy();
+canRain1 = false;
+});
+sjs.onHit("arch2",["right_screen","left_screen","bottom_screen","top_screen"], function(x,y){
+x.destroy();
+canRain2 = false;
+});
+sjs.onHit("rain1",["right_screen","left_screen","bottom_screen"], function(x,y){
+x.destroy();
+});
+
+sjs.onHit("rain2",["right_screen","left_screen","bottom_screen"], function(x,y){
+x.destroy();
+});
+
+var flagOn = true;
+sjs.onHit("player","flag", function(x,y){ x.stop();
+if(flagOn == true){
+flagOn = false;
+setTimeout(function(){
+y.setImage("Images/flag_none.png");
+},500);
+setTimeout(function(){
+y.setImage("Images/flag_win.png");
+},1000);
+setTimeout(function(){
+window.location = "winner.html";
+},1750);
+}
+});
+var score = 0;
+var score_txt = new sjs.Text("Score: 0", 21, "green");
+score_txt.moveTo(700, 470);
+score_txt.fixed = true;
+sjs.onHit("player","score", function(x,y){
+score = score + 1;
+score_txt.setText("Score :"+ score);
+localStorage.setItem("score", score);
+y.destroy();
+});
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+function blocker(){  
+var blocker = new sjs.Image 
+("Images/block.png"); 
+blocker.type = "blocker";   
+blocker.setSize(70,100); 
+blocker.center().offset(-sjs.gx,10); 
+blocker.lives = 30; 
+blocker.upgraded = false;
+
+blocker.onMouseDown(function(){ 
+blocker.draggable(); 
+blocker.follow(sjs.mouse); 
+});   
+blocker.onMouseUp(function(){ 
+setTimeout(function(){ 
+blocker.undraggable(); 
+},100) 
+blocker.unfollow(sjs.mouse); 
+blocker.setGravity(); 
+});   
+} 
+
+
+
+
+
+
+
+
+
+
+
+function gunman(){ 
+var gunman = new sjs.Image("Images/gun.png"); 
+gunman.type = "gunman"; 
+gunman.setSize(70,70); 
+gunman.center().offset(-sjs.gx,20); 
+gunman.upgraded = false;
+gunman.onMouseDown(function(){ 
+gunman.draggable(); 
+gunman.follow(sjs.mouse); 
+}); 
+gunman.onMouseUp(function(){ 
+setTimeout(function(){ 
+gunman.undraggable(); 
+},100) 
+gunman.unfollow(sjs.mouse); 
+gunman.setGravity(); 
+});   
+gunman.center().offset(-sjs.gx,20); 
+var range = new sjs.Image(""); 
+range.type = "range"; 
+range.setSize(300,50); 
+range.moveTo(gunman.getX()-300,gunman.getY()); 
+range.follow(gunman);   
+range.fire=true; 
+range.firerate = 1500; 
+range.node.style.zIndex = -2; 
+gunman.range = range;   
+}   
+
+
+
+
+
+
+
+
+
+
+
+
+function flyguy(){ 
+var flyguy = new sjs.Image("Images/fly.png");  
+array.push(flyguy); 
+flyguy.type = "flyguy"; 
+flyguy.setSize(50,50); 
+flyguy.center().offset(-sjs.gx+250,-110); 
+flyguy.onMouseDown(function(){ 
+flyguy.draggable(); 
+flyguy.follow(sjs.mouse); 
+}); 
+flyguy.onMouseUp(function(){ 
+setTimeout(function(){ 
+flyguy.undraggable(); 
+},100) 
+flyguy.unfollow(sjs.mouse); 
+});   
+flyguy.center().offset(-sjs.gx+250,-110); 
+var flyrange = new sjs.Image(""); 
+flyrange.type = "flyrange"; 
+flyrange.setSize(600,900); 
+flyrange.moveTo(flyguy.getX()-600,flyguy.getY()-450);   
+flyrange.follow(flyguy); 
+flyrange.noBounds = true; 
+flyrange.fire=true; 
+flyrange.node.style.zIndex = -2; 
+flyguy.flyrange = flyrange;
+flyrange.flyguy = flyguy;   
+}   
+
+
+
+</script>
+<style> 
+.images{ 
+height:50px; 
+margin:15px; 
+}   
+</style>   
+</head>
+<body onload="start()">
+<h1> Project Skyce</h1>
+<center> 
+<img src="Images/block.png" class="images" onclick="blocker()">   
+<img src="Images/gun.png" class="images" onclick="blocker()">   
+<img src="Images/fly.png" class="images" onclick="flyguy()">   
+<br> 
+<input type="button" value="Hoplite" onclick="blocker()">   
+<input type="button" value="E-Troop" onclick="gunman()">   
+<input type="button" value="F.L.I." onclick="flyguy()"> 
+
+<div id="target" style="margin:auto;background:grey;"></div>
+</center>  
+</body>
+</html>
