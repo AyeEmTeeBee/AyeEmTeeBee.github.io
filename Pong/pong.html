@@ -1,0 +1,93 @@
+
+<html>
+<head>
+<title> Poong Mania </title>
+<script src="https://simplycoding.org/files/simplyjs/simply.js"></script>
+<script>
+function start(){
+sjs.open();
+// A particular planet's property in spacetime
+var ImaPlanet = new sjs.Image("Images/planet.png") ;
+ImaPlanet.type = "ball";
+ImaPlanet.setSize(100,100);
+ImaPlanet.center();
+ImaPlanet.friction = 0;
+ImaPlanet.bounce();
+ImaPlanet.pushRight(3);
+ImaPlanet.pushUp(5);
+
+var ImaPlanet2 = new sjs.Image("Images/spike.png") ;
+ImaPlanet2.type = "ball";
+ImaPlanet2.setSize(40,40);
+ImaPlanet2.center();
+ImaPlanet2.friction = 0;
+ImaPlanet2.bounce();
+ImaPlanet2.pushRight(2);
+ImaPlanet2.pushUp(1);
+
+var ImaPlanet3 = new sjs.Image("Images/spike.png") ;
+ImaPlanet3.type = "ball";
+ImaPlanet3.setSize(20,20);
+ImaPlanet3.center();
+ImaPlanet3.friction = 0;
+ImaPlanet3.bounce();
+ImaPlanet3.pushRight(1);
+ImaPlanet3.pushDown(0.5);
+
+var ImaPlanet4 = new sjs.Image("Images/spike.png") ;
+ImaPlanet4.type = "ball";
+ImaPlanet4.setSize(50,50);
+ImaPlanet4.center();
+ImaPlanet4.friction = 0;
+ImaPlanet4.bounce();
+ImaPlanet4.pushLeft(1);
+ImaPlanet4.pushUp(1.2);
+
+var ImaPlanet5 = new sjs.Image("Images/spike.png") ;
+ImaPlanet5.type = "ball";
+ImaPlanet5.setSize(30,30);
+ImaPlanet5.center();
+ImaPlanet5.friction = 0;
+ImaPlanet5.bounce();
+ImaPlanet5.pushDown(0.7);
+
+//massive planet sized bars that prevents the planet from drifting off into space
+var paddle1 = new sjs.Image("Images/green.png");
+paddle1.type = "paddle";
+paddle1.centerH();
+paddle1.setSize(200,20);
+var paddle2 = new sjs.Image("Images/green.png");
+paddle2.type = "paddle";
+paddle2.center().bottom();
+paddle2.setSize(200,20);
+sjs.onHit("ball","paddle", function(ball,paddle){sjs.bounceOff(ball,paddle);});
+//#ImaPlanet
+sjs.onHit("ball",["top_screen","bottom_screen"],function(){
+window.location = "gameover.html";
+});
+sjs.keyDown(LEFT_KEY, function(){
+paddle1.pushLeft(4);
+paddle2.pushLeft(4);
+}); 
+
+sjs.keyDown(RIGHT_KEY, function(){
+paddle1.pushRight(4);
+paddle2.pushRight(4);
+});
+//score for keeping planet from drifting off into space
+var score = 0;var score_txt = new sjs.Text("Score: 0", 21, "orange")
+sjs.onHit("ball","paddle",function(ball,paddle){score = score +1;score_txt.setText("Score: "+score);soundEffect.play();sjs.bounceOff(ball,paddle);});
+//joyfull sounds when planet collides with bars and bounces safely
+var soundEffect = new Audio('Music/pop.mp3');
+
+
+
+} //end start
+</script>
+</head>
+<body onload="start()">
+<h1> Totally Pong </h1>
+
+<div id="target" style="margin:auto;background:grey;"></div>
+</body>
+</html>
